@@ -7,7 +7,17 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-// Creates table with only mandatory fields
+
+pool.connect()
+  .then(client => {
+    console.log("PostgreSQL database connected successfully.");
+    client.release();
+  })
+  .catch(err => {
+    console.error("Failed to connect to PostgreSQL:", err.message);
+    process.exit(1);
+  });
+
 async function createTable() {
   const client = await pool.connect();
   try {
@@ -25,7 +35,6 @@ async function createTable() {
   }
 }
 
-// Inserts parsed data into PostgreSQL
 async function insertData(users) {
   const client = await pool.connect();
   try {

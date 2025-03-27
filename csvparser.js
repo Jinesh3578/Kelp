@@ -1,6 +1,5 @@
 const fs = require("fs");
 
-// Converts "a.b.c" into nested JSON structure
 function nestObject(obj, keyPath, value) {
   let keys = keyPath.split(".");
   let current = obj;
@@ -14,7 +13,6 @@ function nestObject(obj, keyPath, value) {
   current[keys[0]] = value;
 }
 
-// Parses CSV into JSON
 async function parseCSV(filePath) {
   const fileContent = fs.readFileSync(filePath, "utf8");
   const lines = fileContent
@@ -22,20 +20,18 @@ async function parseCSV(filePath) {
     .map(line => line.trim())
     .filter(line => line !== "");
 
-  if (lines.length < 2) throw new Error(`Invalid CSV file (${filePath}). It must have at least a header and one row.`);
+  if (lines.length < 2) throw new Error(`Invalid CSV file (${filePath}). It must have at least a header and one record.`);
 
-  // Extract headers (first row)
   const headers = lines[0].split(",").map(h => h.trim());
   const records = [];
 
-  // Process each row safely
   for (let i = 1; i < lines.length; i++) {
     const values = splitCSVRow(lines[i]);
     const record = { name: "", age: null, additional_info: {} };
 
     for (let j = 0; j < headers.length; j++) {
       const key = headers[j];
-      const value = values[j] ? values[j].trim().replace(/^"(.*)"$/, "$1") : null; // Remove surrounding quotes
+      const value = values[j] ? values[j].trim().replace(/^"(.*)"$/, "$1") : null;
 
       if (key === "name.firstName" || key === "name.lastName") {
         record.name += value ? ` ${value}` : "";
@@ -53,7 +49,6 @@ async function parseCSV(filePath) {
   return { data: records };
 }
 
-// Custom function to properly handle CSV row splitting
 function splitCSVRow(row) {
   const result = [];
   let current = "";
