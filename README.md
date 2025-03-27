@@ -110,7 +110,7 @@ parseCSV(filePath)
 splitCSVRow(row)
     - Splits a CSV row into separate values while handling:
 
-        Quoted values ("John, Doe" → John, Doe).
+        Quoted values ("Jinesh, Shah" → Jinesh, Shah).
         Empty values (,, → null).
 
     - Ensures that data remains structured and accurate.
